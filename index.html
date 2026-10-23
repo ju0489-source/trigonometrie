@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trigonometrische Funktionen – Interaktive Lernplattform</title>
+    <style>
+        :root {
+            --primary: #2b6cb0;
+            --primary-hover: #2c5282;
+            --primary-light: #ebf8ff;
+            --secondary: #319795;
+            --dark: #1a202c;
+            --light-bg: #f7fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --accent-merke: #fffaf0;
+            --border-merke: #ecc94b;
+            --success: #38a169;
+            --error: #e53e3e;
+            --warning: #dd6b20;
+            --radius: 10px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Accessibility & Focus */
+        a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+            outline: 3px solid #3182ce;
+            outline-offset: 2px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Layout Container */
+        .header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo-area h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .main-container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 0 20px 60px 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        /* Typography */
+        h2 { color: var(--primary); margin-top: 0; font-size: 1.6rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 8px; }
+        h3 { color: var(--dark); margin-top: 20px; font-size: 1.25rem; }
+        h4 { margin-top: 15px; font-size: 1.1rem; }
+
+        .math-symbol {
+            font-family: "Georgia", "Times New Roman", serif;
+            font-style: italic;
+        }
+
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            vertical-align: middle;
+            text-align: center;
+            font-size: 0.9em;
+            padding: 0 4px;
+        }
+        .fraction .num { border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+        .fraction .den { padding-top: 1px; }
+
+        /* Module Boxes */
+        .goals-box {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 15px 20px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin-bottom: 20px;
+        }
+        .goals-box h3 { margin-top: 0; color: var(--primary); font-size: 1.1rem; }
+        .goals-box ul { margin: 0; padding-left: 20px; }
+
+        .merke-box {
+            background-color: var(--accent-merke);
+            border: 1px solid var(--border-merke);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .merke-box .merke-title {
+            font-weight: bold;
+            color: #975a16;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            overflow-x: auto;
+            display: block;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            text-align: center;
+            min-width: 70px;
+        }
+        .data-table th { background: var(--light-bg); }
+
+        /* Interactive Widgets */
+        .widget-container {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .widget-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-top: 15px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 160px;
+            flex: 1;
+        }
+        .control-group label {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-muted);
+        }
+
+        /* Self Test UI */
+        .task-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #ffffff;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 8px;
+        }
+        .badge {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .badge-grundlagen { background: #ebf8ff; color: #2b6cb0; }
+        .badge-anwenden { background: #feebc8; color: #c05621; }
+        .badge-transfer { background: #e9d8fd; color: #6b46c1; }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .option-label:hover { background: var(--light-bg); }
+
+        .input-text {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: var(--primary-hover); }
+        .btn-secondary { background: #edf2f7; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: #e2e8f0; }
+
+        .feedback-box {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            display: none;
+        }
+        .feedback-correct { background: #c6f6d5; color: #22543d; border: 1px solid #9ae6b4; }
+        .feedback-incorrect { background: #fed7d7; color: #742a2a; border: 1px solid #feb2b2; }
+
+        .hint-box, .solution-box {
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 6px;
+            background: #edf2f7;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* Dashboard & Progress */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .module-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .module-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #edf2f7;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Printable Style */
+        @media print {
+            .header, .nav-links, .widget-container, .btn, .control-group { display: none !important; }
+            .card { box-shadow: none; border: none; padding: 0; }
+            body { background: white; color: black; }
+        }
+
+        /* Ergänzte Achsenskalierungen und Kapitelübersicht */
+        svg { max-width:100%; }
+        #svg-mod1, #svg-ferris { height:auto; }
+        .summary-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+        .summary-panel { border:1px solid var(--border); border-radius:8px; padding:16px; break-inside:avoid; }
+        .summary-panel h3 { margin-top:0; font-size:1.08rem; }
+        .summary-panel p { margin:8px 0; }
+        .summary-formula { background:var(--primary-light); border-radius:6px; padding:12px; text-align:center; font-size:1.15rem; }
+        .summary-visual { width:100%; height:180px; }
+        @media(max-width:650px) { .summary-grid { grid-template-columns:1fr; } }
+        @media print { #summary-section .summary-grid { grid-template-columns:1fr 1fr; gap:10px; } #summary-section { font-size:10pt; } #summary-section h2 { font-size:17pt; } #summary-section .summary-panel { padding:10px; } #summary-section .summary-visual { height:130px; } }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-content">
+        <div class="logo-area">
+            <span aria-hidden="true">📐</span>
+            <h1>Trigonometrische Funktionen</h1>
+        </div>
+        <nav class="nav-links" aria-label="Hauptnavigation">
+            <button class="nav-btn active" onclick="showSection('dashboard')">Übersicht</button>
+            <button class="nav-btn" onclick="showSection('mod1')">1. Einheitskreis</button>
+            <button class="nav-btn" onclick="showSection('mod2')">2. Bogenmaß</button>
+            <button class="nav-btn" onclick="showSection('mod3')">3. Grundfunktionen</button>
+            <button class="nav-btn" onclick="showSection('mod4')">4. Allgemeine Sinusfkt.</button>
+            <button class="nav-btn" onclick="showSection('mod5')">5. Gleichungen</button>
+            <button class="nav-btn" onclick="showSection('mod6')">6. Anwendungen</button>
+            <button class="nav-btn" onclick="showSection('exam')">Abschlusscheck</button>
+            <button class="nav-btn" onclick="showSection('formulas')">Formeln</button>
+            <button class="nav-btn" onclick="showSection('summary')">Übersichtsblatt</button>
+        </nav>
+    </div>
+</header>
+
+<main class="main-container">
+
+    <!-- DASHBOARD -->
+    <section id="dashboard-section" class="section-content">
+        <div class="card">
+            <h2>Willkommen beim Wiederholungskurs!</h2>
+            <p>Diese Lernplattform hilft dir, das Themengebiet der <strong>Trigonometrischen Funktionen</strong> der Sekundarstufe II selbstständig zu wiederholen und dein Wissen zu testen. Wähle ein Modul aus, um zu starten.</p>
+            <div class="dashboard-grid" id="dashboard-modules">
+                <!-- Modulkarten werden per JS dynamisch eingefügt -->
+            </div>
+            <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <button class="btn btn-secondary" onclick="resetAllProgress()">Lernfortschritt zurücksetzen</button>
+                <small style="color: var(--text-muted)">Dein Fortschritt wird lokal in deinem Browser gespeichert.</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODUL 1: EINHEITSKREIS -->
+    <section id="mod1-section" class="section-content" style="display:none;">
+        <div class="card">
+            <h2>Modul 1: Sinus und Kosinus am Einheitskreis</h2>
+            
+            <div class="goals-box">
+                <h3>Das kannst du danach:</h3>
+                <ul>
+                    <li>Den Aufbau des Einheitskreises und die Definition von sin(α) und cos(α) erklären.</li>
+                    <li>Die Koordinaten eines Punktes P = (cos(α) | sin(α)) bestimmen und ablesen.</li>
+                    <li>Die Vorzeichen von sin(α) und cos(α) in den vier Quadranten zuordnen.</li>
+                    <li>Wichtige Exaktwerte (0°, 30°, 45°, 60°, 90°) angeben.</li>
+                </ul>
+            </div>
+
+            <h3>1. Kurz erklärt</h3>
+            <p>Der <strong>Einheitskreis</strong> ist ein Kreis mit dem Radius r = 1 im Koordinatensystem mit dem Mittelpunkt (0 | 0). Ein Winkel α wird von der positiven x-Achse gegen den Uhrzeigersinn abgetragen.</p>
+            <p>Der Schnittpunkt des Winkelschenkels mit dem Einheitskreis ist der Punkt <strong>P = (cos(α) | sin(α))</strong>. Somit entspricht die x-Koordinate genau cos(α) und die y-Koordinate genau sin(α).</p>
+
+            <div class="merke-box">
+                <div class="merke-title">💡 MERKE</div>
+                <ul>
+                    <li><strong>Punkt am Kreis:</strong> P = (cos(α) | sin(α))</li>
+                    <li><strong>Quadrant I (0°–90°):</strong> cos(α) &gt; 0, sin(α) &gt; 0</li>
+                    <li><strong>Quadrant II (90°–180°):</strong> cos(α) &lt; 0, sin(α) &gt; 0</li>
+                    <li><strong>Quadrant III (180°–270°):</strong> cos(α) &lt; 0, sin(α) &lt; 0</li>
+                    <li><strong>Quadrant IV (270°–360°):</strong> cos(α) &gt; 0, sin(α) &lt; 0</li>
+                    <li><strong>Symmetrien:</strong> sin(-α) = -sin(α), cos(-α) = cos(α)</li>
+                </ul>
+            </div>
+
+            <h3>Interaktive Veranschaulichung</h3>
+            <div class="widget-container">
+                <div style="display: flex; justify-content: center;">
+                    <svg id="svg-mod1" width="420" height="420" viewBox="-1.4 -1.4 2.8 2.8" style="background:#fff; border-radius:8px; border:1px solid #cbd5e0;">
+                        <!-- Achsen -->
+                        <line x1="-1.3" y1="0" x2="1.3" y2="0" stroke="#a0aec0" stroke-width="0.02" />
+                        <line x1="0" y1="-1.3" x2="0" y2="1.3" stroke="#a0aec0" stroke-width="0.02" />
+                        <!-- Kreis -->
+                        <circle cx="0" cy="0" r="1" fill="none" stroke="#2b6cb0" stroke-width="0.03" />
+                        <!-- Dreieck & Projektionen -->
+                        <line id="m1-radius" x1="0" y1="0" x2="0.707" y2="-0.707" stroke="#2d3748" stroke-width="0.03" />
+                        <line id="m1-cos" x1="0" y1="0" x2="0.707" y2="0" stroke="#e53e3e" stroke-width="0.05" />
+                        <line id="m1-sin" x1="0.707" y1="0" x2="0.707" y2="-0.707" stroke="#38a169" stroke-width="0.05" />
+                        <circle id="m1-point" cx="0.707" cy="-0.707" r="0.06" fill="#e53e3e" />
+                    </svg>
+                </div>
+                <div class="widget-controls">
+                    <div class="control-group">
+                        <label for="m1-slider">Winkel α: <span id="m1-angle-val">45</span>°</label>
+                        <input type="range" id="m1-slider" min="0" max="360" value="45" oninput="updateMod1Widget()">
+                    </div>
+                    <div style="flex:1; min-width:200px;">
+                        <div><strong style="color:#e53e3e;">cos(α) (x-Wert):</strong> <span id="m1-cos-val">0.71</span></div>
+                        <div><strong style="color:#38a169;">sin(α) (y-Wert):</strong> <span id="m1-sin-val">0.71</span></div>
+                        <div><strong>Punkt P:</strong> (<span id="m1-px">0.71</span> | <span id="m1-py">0.71</span>)</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Durchgerechnete Beispiele</h3>
+            <p><strong>Beispiel 1:</strong> Bestimme sin(150°) und cos(150°).</p>
+            <p><em>Lösung:</em> 150° liegt im II. Quadranten. Der Bezugswinkel zur x-Achse beträgt 180° - 150° = 30°. Im II. Quadranten ist sin(α) positiv und cos(α) negativ. Somit ist sin(150°) = sin(30°) = 0,5 und cos(150°) = -cos(30°) = -√3/2 ≈ -0,866.</p>
+
+            <h3>Typische Fehler</h3>
+            <ul>
+                <li><strong>Vertauschen der Koordinaten:</strong> Beachte stets, dass cos(α) der x-Wert und sin(α) der y-Wert ist.</li>
+                <li><strong>Vorzeichenfehler:</strong> Im III. Quadranten sind sowohl sin(α) als auch cos(α) negativ.</li>
+            </ul>
+
+            <h3>Selbsttest Modul 1</h3>
+            <div id="quiz-mod1"></div>
+        </div>
+    </section>
+
+    <!-- MODUL 2: BOGENMASS -->
+    <section id="mod2-section" class="section-content" style="display:none;">
+        <div class="card">
+            <h2>Modul 2: Das Bogenmaß</h2>
+            <div class="goals-box">
+                <h3>Das kannst du danach:</h3>
+                <ul>
+                    <li>Die Bedeutung des Bogenmaßes x als Bogenlänge am Einheitskreis erklären.</li>
+                    <li>Winkel vom Gradmaß ins Bogenmaß und umgekehrt umrechnen (360° = 2π rad).</li>
+                    <li>Exakte Bogenmaßwerte wie π/6, π/4, π/3, π/2 zuordnen.</li>
+                    <li>Bogenlängen mit s = r · x berechnen.</li>
+                </ul>
+            </div>
+
+            <h3>1. Kurz erklärt</h3>
+            <p>Das <strong>Bogenmaß</strong> gibt die Länge des Kreisbogens am Einheitskreis (r = 1) an, der zum Winkel α gehört. Der Vollkreis (360°) entspricht dem Kreisumfang U = 2·π·r = 2π.</p>
+
+            <div class="merke-box">
+                <div class="merke-title">💡 MERKE</div>
+                <ul>
+                    <li><strong>Grundrelation:</strong> 360° ≙ 2π rad ≈ 6,2832 rad</li>
+                    <li><strong>Gradmaß in Bogenmaß:</strong> x = α · (2π / 360°)</li>
+                    <li><strong>Bogenmaß in Gradmaß:</strong> α = x · (360° / 2π)</li>
+                    <li><strong>Bogenlänge allgemein:</strong> s = r · x  (mit x im Bogenmaß)</li>
+                </ul>
+            </div>
+
+            <h3>Wichtige Exaktwerte</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Gradmaß α</th>
+                        <th>0°</th>
+                        <th>30°</th>
+                        <th>45°</th>
+                        <th>60°</th>
+                        <th>90°</th>
+                        <th>180°</th>
+                        <th>270°</th>
+                        <th>360°</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Bogenmaß x</strong></td>
+                        <td>0</td>
+                        <td><span class="fraction"><span class="num">π</span><span class="den">6</span></span></td>
+                        <td><span class="fraction"><span class="num">π</span><span class="den">4</span></span></td>
+                        <td><span class="fraction"><span class="num">π</span><span class="den">3</span></span></td>
+                        <td><span class="fraction"><span class="num">π</span><span class="den">2</span></span></td>
+                        <td>π</td>
+                        <td><span class="fraction"><span class="num">3π</span><span class="den">2</span></span></td>
+                        <td>2π</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Interaktiver Winkel-Konverter</h3>
+            <div class="widget-container">
+                <div class="widget-controls">
+                    <div class="control-group">
+                        <label for="m2-deg">Gradmaß α (°):</label>
+                        <input type="number" id="m2-deg" value="60" oninput="convertDegToRad()">
+                    </div>
+                    <div class="control-group">
+                        <label for="m2-rad">Bogenmaß x (rad):</label>
+                        <input type="number" id="m2-rad" value="1.047" step="0.01" oninput="convertRadToDeg()">
+                    </div>
+                </div>
+                <div style="margin-top:15px; background:#fff; padding:12px; border-radius:6px; border:1px solid #e2e8f0;">
+                    <strong>Rechenweg:</strong> <span id="m2-calc">60° · (2π / 360°) = π/3 rad ≈ 1.0472 rad</span>
+                </div>
+            </div>
+
+            <h3>Durchgerechnete Beispiele</h3>
+            <p><strong>Beispiel:</strong> Berechne die Bogenlänge s eines Kreisrings mit Radius r = 5 cm bei einem Winkel von α = 45°.</p>
+            <p><em>Lösung:</em> Zuerst 45° in Bogenmaß umrechnen: x = 45° · (2π / 360°) = π/4 ≈ 0,7854. Dann s = r · x = 5 cm · (π/4) ≈ 3,93 cm.</p>
+
+            <h3>Selbsttest Modul 2</h3>
+            <div id="quiz-mod2"></div>
+        </div>
+    </section>
+
+    <!-- MODUL 3: GRUNDFUNKTIONEN -->
+    <section id="mod3-section" class="section-content" style="display:none;">
+        <div class="card">
+            <h2>Modul 3: Sinusfunktion und Kosinusfunktion</h2>
+            <div class="goals-box">
+                <h3>Das kannst du danach:</h3>
+                <ul>
+                    <li>Die Entstehung von f(x) = sin(x) und g(x) = cos(x) aus dem Einheitskreis beschreiben.</li>
+                    <li>Eigenschaften wie Definitionsbereich ℝ, Wertebereich [-1, 1] und Periode 2π benennen.</li>
+                    <li>Charakteristische Punkte (Nullstellen, Hoch- und Tiefpunkte) angeben.</li>
+                    <li>Die Verschiebung in x-Richtung cos(x) = sin(x + π/2) erklären.</li>
+                </ul>
+            </div>
+
+            <h3>1. Kurz erklärt</h3>
+            <p>Trägt man den Winkel x auf der horizontalen Achse und den zugehörigen Wert sin(x) bzw. cos(x) auf der vertikalen Achse ab, entstehen die charakteristischen Wellengraphen.</p>
+
+            <div class="merke-box">
+                <div class="merke-title">💡 MERKE</div>
+                <ul>
+                    <li><strong>Periode:</strong> p = 2π (bzw. 360°) – nach 2π wiederholt sich der Verlauf.</li>
+                    <li><strong>Symmetrie:</strong> sin(x) ist punktsymmetrisch zum Ursprung: sin(-x) = -sin(x). cos(x) ist achsensymmetrisch zur y-Achse: cos(-x) = cos(x).</li>
+                    <li><strong>Verschiebung in x-Richtung:</strong> Der Kosinusgraph entsteht aus dem Sinusgraphen durch Verschiebung um π/2 nach links: cos(x) = sin(x + π/2).</li>
+                </ul>
+            </div>
+
+            <h3>Interaktive Graphendarstellung</h3>
+            <div class="widget-container">
+                <svg id="svg-mod3" width="100%" height="300" viewBox="-0.5 -1.6 7.5 3.4" preserveAspectRatio="none" style="background:#fff; border-radius:6px; border:1px solid #cbd5e0;">
+                    <line x1="0" y1="0" x2="6.8" y2="0" stroke="#a0aec0" stroke-width="0.03" />
+                    <line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#a0aec0" stroke-width="0.03" />
+                    <!-- Sinus Graph -->
+                    <path id="m3-sin-path" d="" fill="none" stroke="#2b6cb0" stroke-width="0.05" />
+                    <!-- Kosinus Graph -->
+                    <path id="m3-cos-path" d="" fill="none" stroke="#dd6b20" stroke-width="0.05" stroke-dasharray="0.1,0.05" />
+                </svg>
+                <div style="display:flex; gap:15px; margin-top:10px;">
+                    <label><input type="checkbox" id="m3-show-sin" checked onchange="drawMod3()"> <span style="color:#2b6cb0; font-weight:bold;">f(x) = sin(x)</span></label>
+                    <label><input type="checkbox" id="m3-show-cos" checked onchange="drawMod3()"> <span style="color:#dd6b20; font-weight:bold;">g(x) = cos(x)</span></label>
+                </div>
+            </div>
+
+            <h3>Selbsttest Modul 3</h3>
+            <div id="quiz-mod3"></div>
+        </div>
+    </section>
+
+    <!-- MODUL 4: ALLGEMEINE SINUSFUNKTION -->
+    <section id="mod4-section" class="section-content" style="display:none;">
+        <div class="card">
+            <h2>Modul 4: Die allgemeine Sinusfunktion</h2>
+            <div class="goals-box">
+                <h3>Das kannst du danach:</h3>
+                <ul>
+                    <li>Die Parameterform <strong>f(x) = a · sin(b(x - c)) + d</strong> sicher anwenden.</li>
+                    <li>Einfluss der Parameter angeben: |a| (Amplitude), b (Frequenz/Periode p = 2π/|b|), c (Verschiebung in x-Richtung), d (Mittellinie/y-Verschiebung).</li>
+                    <li>Parameter aus gegebenen Funktionsgraphen ablesen.</li>
+                </ul>
+            </div>
+
+            <h3>1. Kurz erklärt</h3>
+            <p>Jede allgemeine Sinusfunktion lässt sich durch Transformationen aus der Grundfunktion f(x) = sin(x) gewinnen.</p>
+
+            <div class="merke-box">
+                <div class="merke-title">💡 MERKE</div>
+                <ul>
+                    <li><strong>a (Amplitude):</strong> Streckung/Stauchung in y-Richtung. Die Amplitude ist stets positiv: A = |a|. Ist a &lt; 0, wird der Graph zusätzlich an der Mittellinie gespiegelt.</li>
+                    <li><strong>b (Periodenfaktor):</strong> Verändert die Periode: <strong>p = 2π / |b|</strong>. Für b &gt; 1 ist der Graph gestaucht, für 0 &lt; b &lt; 1 gestreckt.</li>
+                    <li><strong>c (Verschiebung in x-Richtung um den Wert c):</strong> Verschiebung nach rechts für c &gt; 0, nach links für c &lt; 0. Achtung bei der Form a·sin(bx + φ): hier ist c = -φ/b.</li>
+                    <li><strong>d (Mittellinie):</strong> Vertikale Verschiebung. Die Mittellinie liegt bei y = d. Wertebereich: W = [d - |a|, d + |a|].</li>
+                </ul>
+            </div>
+
+            <h3>Interaktiver Parameter-Explorer</h3>
+            <div class="widget-container">
+                <div style="background:#fff; padding:10px; border-radius:6px; font-weight:bold; font-size:1.1rem; text-align:center; margin-bottom:10px;">
+                    f(x) = <span id="m4-eq-display">1.0 · sin(1.0 · (x - 0.0)) + 0.0</span>
+                </div>
+                <svg id="svg-mod4" width="100%" height="400" viewBox="-1 -6.6 8.5 13.2" preserveAspectRatio="none" style="background:#fff; border-radius:6px; border:1px solid #cbd5e0;">
+                    <line x1="-1" y1="0" x2="7" y2="0" stroke="#cbd5e0" stroke-width="0.05" />
+                    <line x1="0" y1="-6.3" x2="0" y2="6.3" stroke="#cbd5e0" stroke-width="0.05" />
+                    <!-- Mittellinie -->
+                    <line id="m4-midline" x1="-1" y1="0" x2="7" y2="0" stroke="#a0aec0" stroke-width="0.04" stroke-dasharray="0.1,0.1" />
+                    <!-- Graph -->
+                    <path id="m4-graph" d="" fill="none" stroke="#2b6cb0" stroke-width="0.08" />
+                </svg>
+                <div class="widget-controls">
+                    <div class="control-group">
+                        <label for="m4-a">a (Amplitude): <span id="m4-a-val">1.0</span></label>
+                        <input type="range" id="m4-a" min="-3" max="3" step="0.5" value="1" oninput="updateMod4()">
+                    </div>
+                    <div class="control-group">
+                        <label for="m4-b">b (Frequenz): <span id="m4-b-val">1.0</span></label>
+                        <input type="range" id="m4-b" min="0.5" max="3" step="0.5" value="1" oninput="updateMod4()">
+                    </div>
+                    <div class="control-group">
+                        <label for="m4-c">c (Verschiebung in x-Richtung): <span id="m4-c-val">0.0</span></label>
+                        <input type="range" id="m4-c" min="-2" max="2" step="0.25" value="0" oninput="updateMod4()">
+                    </div>
+                    <div class="control-group">
+                        <label for="m4-d">d (Mittellinie): <span id="m4-d-val">0.0</span></label>
+                        <input type="range" id="m4-d" min="-2" max="2" step="0.5" value="0" oninput="updateMod4()">
+                    </div>
+                </div>
+            </div>
+
+            <h3>Durchgerechnetes Beispiel</h3>
+            <p><strong>Gegeben:</strong> f(x) = 3 · sin(2 · (x - π/4)) + 1.</p>
+            <p><em>Analyse:</em> Amplitude A = |3| = 3. Mittellinie bei y = 1. Wertebereich W = [1 - 3, 1 + 3] = [-2, 4]. Periode p = 2π / 2 = π. Verschiebung in x-Richtung c = π/4 nach rechts.</p>
+
+            <h3>Selbsttest Modul 4</h3>
+            <div id="quiz-mod4"></div>
+        </div>
+    </section>
+
+    <!-- MODUL 5: GLEICHUNGEN -->
+    <section id="mod5-section" class="section-content" style="display:none;">
+        <div class="card">
+            <h2>Modul 5: Trigonometrische Gleichungen</h2>
+            <div class="goals-box">
+                <h3>Das kannst du danach:</h3>
+                <ul>
+                    <li>Einfache Gleichungen sin(x) = k und cos(x) = k systematisch lösen.</li>
+                    <li>Symmetrien nutzen für die zweite Grundlösung: x₂ = π - x₁ für sin(x), x₂ = 2π - x₁ für cos(x).</li>
+                    <li>Die allgemeine Lösungsmenge durch Addition von k · 2π aufstellen.</li>
+                    <li>Gleichungen mit innerer Transformation wie 2·sin(3x) - 1 = 0 mittels Substitution lösen.</li>
+                </ul>
+            </div>
+
+            <h3>1. Kurz erklärt</h3>
+            <p>Da trigonometrische Funktionen periodisch sind, besitzen Gleichungen der Form sin(x) = k (für -1 ≤ k ≤ 1) unendlich viele Lösungen.</p>
+
+            <div class="merke-box">
+                <div class="merke-title">💡 MERKE &amp; RECHENSCHEMA</div>
+                <ol>
+                    <li><strong>Isolieren:</strong> Bringe den Ausdruck auf die Form sin(z) = k.</li>
+                    <li><strong>Grundlösung z₁:</strong> z₁ = arcsin(k) (Taschenrechner im Bogenmaß!).</li>
+                    <li><strong>Zweite Lösung z₂ im Intervall [0, 2π[:</strong> Für sin(z): z₂ = π - z₁. Für cos(z): z₂ = 2π - z₁.</li>
+                    <li><strong>Periodizität:</strong> z = z₁ + k·2π bzw. z = z₂ + k·2π (k ∈ ℤ).</li>
+                    <li><strong>Rücksubstitution (falls z = b·(x - c)):</strong> Nach x auflösen und geforderte Intervallgrenzen überprüfen.</li>
+                </ol>
+            </div>
+
+            <h3>Selbsttest Modul 5</h3>
+            <div id="quiz-mod5"></div>
+        </div>
+    </section>
+
+    <!-- MODUL 6: ANWENDUNGEN -->
+    <section id="mod6-section" class="section-content" style="display:none;">
+        <div class="card">
+            <h2>Modul 6: Anwendungen trigonometrischer Funktionen</h2>
+            <div class="goals-box">
+                <h3>Das kannst du danach:</h3>
+                <ul>
+                    <li>Reale periodische Vorgänge (Riesenrad, Gezeiten, Temperaturschwankungen) mathematisch modellieren.</li>
+                    <li>Aus Sachkontexten Amplitude, Periode, Mittellinie und Verschiebung in x-Richtung ermitteln.</li>
+                    <li>Funktionswerte und gesuchte Zeitpunkte berechnen.</li>
+                </ul>
+            </div>
+
+            <h3>Interaktives Modell: Das Riesenrad</h3>
+            <p>Ein Riesenrad mit Radius R = 10 m dreht sich gleichmäßig. Der Einstieg befindet sich auf Höhe h = 2 m (Tiefpunkt). Eine Umdrehung dauert 60 Sekunden.</p>
+            
+            <div class="widget-container">
+                <div style="display:flex; justify-content:center; align-items:center; gap:30px; flex-wrap:wrap;">
+                    <svg id="svg-ferris" width="340" height="340" viewBox="-16 -25 32 29" style="background:#fff; border-radius:6px; border:1px solid #cbd5e0;">
+                        <g transform="scale(1,-1)">
+                        <!-- Boden -->
+                        <line x1="-15" y1="0" x2="15" y2="0" stroke="#718096" stroke-width="1" />
+                        <!-- Stütze -->
+                        <line x1="0" y1="12" x2="-8" y2="0" stroke="#a0aec0" stroke-width="1" />
+                        <line x1="0" y1="12" x2="8" y2="0" stroke="#a0aec0" stroke-width="1" />
+                        <!-- Rad -->
+                        <circle cx="0" cy="12" r="10" fill="none" stroke="#2b6cb0" stroke-width="1.5" />
+                        <!-- Gondel -->
+                        <line id="ferris-spoke" x1="0" y1="12" x2="0" y2="2" stroke="#2d3748" stroke-width="1" />
+                        <circle id="ferris-gondola" cx="0" cy="2" r="1.5" fill="#e53e3e" />
+                        </g>
+                    </svg>
+                    <div>
+                        <h4>Funktionsterm der Höhe h(t):</h4>
+                        <div style="font-size:1.1rem; font-weight:bold; color:#2b6cb0; margin-bottom:10px;">
+                            h(t) = -10 · cos((2π / 60) · t) + 12
+                        </div>
+                        <div>Zeit t: <span id="ferris-time-val">0</span> Sekunden</div>
+                        <div>Höhe h(t): <strong id="ferris-height-val" style="color:#e53e3e;">2.0</strong> Meter</div>
+                    </div>
+                </div>
+                <div class="widget-controls">
+                    <div class="control-group">
+                        <label for="ferris-slider">Zeit t (Sekunden):</label>
+                        <input type="range" id="ferris-slider" min="0" max="120" value="0" oninput="updateFerris()">
+                    </div>
+                </div>
+            </div>
+
+            <h3>Selbsttest Modul 6</h3>
+            <div id="quiz-mod6"></div>
+        </div>
+    </section>
+
+    <!-- ABSCHLUSSCHECK -->
+    <section id="exam-section" class="section-content" style="display:none;">
+        <div class="card">
+            <h2>Gemischter Abschlusscheck</h2>
+            <p>Teste dein gesamtes Wissen über trigonometrische Funktionen. Dieser Check umfasst 12 gemischte Aufgaben aus allen 6 Themenbereichen.</p>
+            <div id="quiz-exam"></div>
+            <div style="margin-top:20px;">
+                <button class="btn" onclick="evaluateExam()">Abschlusscheck auswerten &amp; abgeben</button>
+            </div>
+            <div id="exam-result-box" style="margin-top:20px; display:none;" class="goals-box">
+                <h3>Deine Gesamtauswertung</h3>
+                <p id="exam-score-text"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORMELÜBERSICHT -->
+    <section id="formulas-section" class="section-content" style="display:none;">
+        <div class="card">
+            <h2>Kompakte Formelübersicht</h2>
+            
+            <h3>1. Einheitskreis &amp; Definitionen</h3>
+            <ul>
+                <li>Punkt am Einheitskreis: P = (cos(α) | sin(α))</li>
+                <li>Trigonometrischer Pythagoras: sin²(α) + cos²(α) = 1</li>
+                <li>Symmetrien: sin(-α) = -sin(α), cos(-α) = cos(α)</li>
+            </ul>
+
+            <h3>2. Bogenmaß</h3>
+            <ul>
+                <li>Umrechnung: x = α · (2π / 360°), α = x · (360° / 2π)</li>
+                <li>Bogenlänge: s = r · x  (x in rad)</li>
+            </ul>
+
+            <h3>3. Allgemeine Sinusfunktion</h3>
+            <div style="background:#edf2f7; padding:10px; border-radius:6px; font-weight:bold; text-align:center; margin:10px 0;">
+                f(x) = a · sin(b(x - c)) + d
+            </div>
+            <ul>
+                <li><strong>|a|:</strong> Amplitude (A = |a|)</li>
+                <li><strong>b:</strong> Periodenfaktor mit Periode p = 2π / |b|</li>
+                <li><strong>c:</strong> Verschiebung in x-Richtung um den Wert c: für c &gt; 0 nach rechts, für c &lt; 0 nach links</li>
+                <li><strong>d:</strong> Vertikale Verschiebung (Mittellinie y = d)</li>
+            </ul>
+
+            <h3>4. Symmetrien &amp; Gleichungen</h3>
+            <ul>
+                <li>Lösungen von sin(x) = k: x₁ = arcsin(k), x₂ = π - x₁</li>
+                <li>Lösungen von cos(x) = k: x₁ = arccos(k), x₂ = 2π - x₁</li>
+            </ul>
+        </div>
+    </section>
+
+
+    <section id="summary-section" class="section-content" style="display:none;">
+      <div class="card">
+        <h2>Übersichtsblatt: Trigonometrische Funktionen</h2>
+        <p>Vom Einheitskreis zum Graphen – vom Graphen zur Gleichung und Anwendung.</p>
+        <button class="btn btn-secondary" onclick="window.print()">Übersichtsblatt drucken</button>
+        <div class="summary-grid">
+          <div class="summary-panel"><h3>1 · Einheitskreis: Koordinaten ablesen</h3><svg class="summary-visual" viewBox="-1.65 -1.4 3.4 2.9" role="img" aria-label="Einheitskreis mit Sinus und Kosinus"><g stroke="#a0aec0" stroke-width=".015"><path d="M -1.3 0 H 1.3 M 0 -1.2 V 1.2" fill="none"/></g><circle r="1" fill="none" stroke="#2b6cb0" stroke-width=".025"/><path d="M 0 0 L .707 -.707" stroke="#2d3748" stroke-width=".02"/><path d="M 0 0 H .707" stroke="#e53e3e" stroke-width=".04"/><path d="M .707 0 V -.707" stroke="#38a169" stroke-width=".04"/><circle cx=".707" cy="-.707" r=".04" fill="#2b6cb0"/><g font-family="Arial" font-size=".13" fill="#2d3748"><text x=".76" y="-.8">P</text><text x="1.04" y=".17">1</text><text x="-1.18" y=".17">−1</text><text x=".06" y="-1.05">1</text><text x=".06" y="1.16">−1</text><text x="1.27" y="-.08">x</text><text x=".08" y="-1.23">y</text><text x=".18" y=".2" fill="#e53e3e">cos(α)</text><text x=".78" y="-.32" fill="#38a169">sin(α)</text><text x=".2" y="-.09">α</text></g></svg><p>P = (cos(α) | sin(α)), Radius r = 1.</p><p style="color:#e53e3e">Kosinus → x-Koordinate</p><p style="color:#38a169">Sinus → y-Koordinate</p><p>Vorzeichen (cos | sin): I (+ | +), II (− | +), III (− | −), IV (+ | −).</p><p>sin²(α) + cos²(α) = 1</p></div>
+          <div class="summary-panel"><h3>2 · Bogenmaß: vom ganzen Kreis ausgehen</h3><div class="summary-formula">360° ≙ 2π rad<br>x = α · (2π / 360°)<br>α = x · (360° / 2π)</div><table class="data-table"><tr><th>α</th><td>0°</td><td>30°</td><td>45°</td><td>60°</td></tr><tr><th>x</th><td>0</td><td>π/6</td><td>π/4</td><td>π/3</td></tr><tr><th>α</th><td>90°</td><td>180°</td><td>270°</td><td>360°</td></tr><tr><th>x</th><td>π/2</td><td>π</td><td>3π/2</td><td>2π</td></tr></table><p>Beispiel: 60° · (2π / 360°) = π/3.</p><p>Bogenlänge: s = r · x (x im Bogenmaß).</p></div>
+          <div class="summary-panel"><h3>3 · Grundfunktionen: eine Umdrehung, eine Periode</h3><svg class="summary-visual" viewBox="-.5 -1.5 7.4 3.1" role="img" aria-label="Sinus und Kosinus über eine Periode"><path d="M -.2 0 H 6.65 M 0 -1.3 V 1.3" fill="none" stroke="#a0aec0" stroke-width=".015"/><path d="M0.0000,-0.0000 L0.0393,-0.0393 L0.0785,-0.0785 L0.1178,-0.1175 L0.1571,-0.1564 L0.1963,-0.1951 L0.2356,-0.2334 L0.2749,-0.2714 L0.3142,-0.3090 L0.3534,-0.3461 L0.3927,-0.3827 L0.4320,-0.4187 L0.4712,-0.4540 L0.5105,-0.4886 L0.5498,-0.5225 L0.5890,-0.5556 L0.6283,-0.5878 L0.6676,-0.6191 L0.7069,-0.6494 L0.7461,-0.6788 L0.7854,-0.7071 L0.8247,-0.7343 L0.8639,-0.7604 L0.9032,-0.7853 L0.9425,-0.8090 L0.9817,-0.8315 L1.0210,-0.8526 L1.0603,-0.8725 L1.0996,-0.8910 L1.1388,-0.9081 L1.1781,-0.9239 L1.2174,-0.9382 L1.2566,-0.9511 L1.2959,-0.9625 L1.3352,-0.9724 L1.3744,-0.9808 L1.4137,-0.9877 L1.4530,-0.9931 L1.4923,-0.9969 L1.5315,-0.9992 L1.5708,-1.0000 L1.6101,-0.9992 L1.6493,-0.9969 L1.6886,-0.9931 L1.7279,-0.9877 L1.7671,-0.9808 L1.8064,-0.9724 L1.8457,-0.9625 L1.8850,-0.9511 L1.9242,-0.9382 L1.9635,-0.9239 L2.0028,-0.9081 L2.0420,-0.8910 L2.0813,-0.8725 L2.1206,-0.8526 L2.1598,-0.8315 L2.1991,-0.8090 L2.2384,-0.7853 L2.2777,-0.7604 L2.3169,-0.7343 L2.3562,-0.7071 L2.3955,-0.6788 L2.4347,-0.6494 L2.4740,-0.6191 L2.5133,-0.5878 L2.5525,-0.5556 L2.5918,-0.5225 L2.6311,-0.4886 L2.6704,-0.4540 L2.7096,-0.4187 L2.7489,-0.3827 L2.7882,-0.3461 L2.8274,-0.3090 L2.8667,-0.2714 L2.9060,-0.2334 L2.9452,-0.1951 L2.9845,-0.1564 L3.0238,-0.1175 L3.0631,-0.0785 L3.1023,-0.0393 L3.1416,-0.0000 L3.1809,0.0393 L3.2201,0.0785 L3.2594,0.1175 L3.2987,0.1564 L3.3379,0.1951 L3.3772,0.2334 L3.4165,0.2714 L3.4558,0.3090 L3.4950,0.3461 L3.5343,0.3827 L3.5736,0.4187 L3.6128,0.4540 L3.6521,0.4886 L3.6914,0.5225 L3.7306,0.5556 L3.7699,0.5878 L3.8092,0.6191 L3.8485,0.6494 L3.8877,0.6788 L3.9270,0.7071 L3.9663,0.7343 L4.0055,0.7604 L4.0448,0.7853 L4.0841,0.8090 L4.1233,0.8315 L4.1626,0.8526 L4.2019,0.8725 L4.2412,0.8910 L4.2804,0.9081 L4.3197,0.9239 L4.3590,0.9382 L4.3982,0.9511 L4.4375,0.9625 L4.4768,0.9724 L4.5160,0.9808 L4.5553,0.9877 L4.5946,0.9931 L4.6338,0.9969 L4.6731,0.9992 L4.7124,1.0000 L4.7517,0.9992 L4.7909,0.9969 L4.8302,0.9931 L4.8695,0.9877 L4.9087,0.9808 L4.9480,0.9724 L4.9873,0.9625 L5.0265,0.9511 L5.0658,0.9382 L5.1051,0.9239 L5.1444,0.9081 L5.1836,0.8910 L5.2229,0.8725 L5.2622,0.8526 L5.3014,0.8315 L5.3407,0.8090 L5.3800,0.7853 L5.4192,0.7604 L5.4585,0.7343 L5.4978,0.7071 L5.5371,0.6788 L5.5763,0.6494 L5.6156,0.6191 L5.6549,0.5878 L5.6941,0.5556 L5.7334,0.5225 L5.7727,0.4886 L5.8119,0.4540 L5.8512,0.4187 L5.8905,0.3827 L5.9298,0.3461 L5.9690,0.3090 L6.0083,0.2714 L6.0476,0.2334 L6.0868,0.1951 L6.1261,0.1564 L6.1654,0.1175 L6.2046,0.0785 L6.2439,0.0393 L6.2832,0.0000" fill="none" stroke="#2b6cb0" stroke-width=".035"/><path d="M0.0000,-1.0000 L0.0393,-0.9992 L0.0785,-0.9969 L0.1178,-0.9931 L0.1571,-0.9877 L0.1963,-0.9808 L0.2356,-0.9724 L0.2749,-0.9625 L0.3142,-0.9511 L0.3534,-0.9382 L0.3927,-0.9239 L0.4320,-0.9081 L0.4712,-0.8910 L0.5105,-0.8725 L0.5498,-0.8526 L0.5890,-0.8315 L0.6283,-0.8090 L0.6676,-0.7853 L0.7069,-0.7604 L0.7461,-0.7343 L0.7854,-0.7071 L0.8247,-0.6788 L0.8639,-0.6494 L0.9032,-0.6191 L0.9425,-0.5878 L0.9817,-0.5556 L1.0210,-0.5225 L1.0603,-0.4886 L1.0996,-0.4540 L1.1388,-0.4187 L1.1781,-0.3827 L1.2174,-0.3461 L1.2566,-0.3090 L1.2959,-0.2714 L1.3352,-0.2334 L1.3744,-0.1951 L1.4137,-0.1564 L1.4530,-0.1175 L1.4923,-0.0785 L1.5315,-0.0393 L1.5708,-0.0000 L1.6101,0.0393 L1.6493,0.0785 L1.6886,0.1175 L1.7279,0.1564 L1.7671,0.1951 L1.8064,0.2334 L1.8457,0.2714 L1.8850,0.3090 L1.9242,0.3461 L1.9635,0.3827 L2.0028,0.4187 L2.0420,0.4540 L2.0813,0.4886 L2.1206,0.5225 L2.1598,0.5556 L2.1991,0.5878 L2.2384,0.6191 L2.2777,0.6494 L2.3169,0.6788 L2.3562,0.7071 L2.3955,0.7343 L2.4347,0.7604 L2.4740,0.7853 L2.5133,0.8090 L2.5525,0.8315 L2.5918,0.8526 L2.6311,0.8725 L2.6704,0.8910 L2.7096,0.9081 L2.7489,0.9239 L2.7882,0.9382 L2.8274,0.9511 L2.8667,0.9625 L2.9060,0.9724 L2.9452,0.9808 L2.9845,0.9877 L3.0238,0.9931 L3.0631,0.9969 L3.1023,0.9992 L3.1416,1.0000 L3.1809,0.9992 L3.2201,0.9969 L3.2594,0.9931 L3.2987,0.9877 L3.3379,0.9808 L3.3772,0.9724 L3.4165,0.9625 L3.4558,0.9511 L3.4950,0.9382 L3.5343,0.9239 L3.5736,0.9081 L3.6128,0.8910 L3.6521,0.8725 L3.6914,0.8526 L3.7306,0.8315 L3.7699,0.8090 L3.8092,0.7853 L3.8485,0.7604 L3.8877,0.7343 L3.9270,0.7071 L3.9663,0.6788 L4.0055,0.6494 L4.0448,0.6191 L4.0841,0.5878 L4.1233,0.5556 L4.1626,0.5225 L4.2019,0.4886 L4.2412,0.4540 L4.2804,0.4187 L4.3197,0.3827 L4.3590,0.3461 L4.3982,0.3090 L4.4375,0.2714 L4.4768,0.2334 L4.5160,0.1951 L4.5553,0.1564 L4.5946,0.1175 L4.6338,0.0785 L4.6731,0.0393 L4.7124,0.0000 L4.7517,-0.0393 L4.7909,-0.0785 L4.8302,-0.1175 L4.8695,-0.1564 L4.9087,-0.1951 L4.9480,-0.2334 L4.9873,-0.2714 L5.0265,-0.3090 L5.0658,-0.3461 L5.1051,-0.3827 L5.1444,-0.4187 L5.1836,-0.4540 L5.2229,-0.4886 L5.2622,-0.5225 L5.3014,-0.5556 L5.3407,-0.5878 L5.3800,-0.6191 L5.4192,-0.6494 L5.4585,-0.6788 L5.4978,-0.7071 L5.5371,-0.7343 L5.5763,-0.7604 L5.6156,-0.7853 L5.6549,-0.8090 L5.6941,-0.8315 L5.7334,-0.8526 L5.7727,-0.8725 L5.8119,-0.8910 L5.8512,-0.9081 L5.8905,-0.9239 L5.9298,-0.9382 L5.9690,-0.9511 L6.0083,-0.9625 L6.0476,-0.9724 L6.0868,-0.9808 L6.1261,-0.9877 L6.1654,-0.9931 L6.2046,-0.9969 L6.2439,-0.9992 L6.2832,-1.0000" fill="none" stroke="#dd6b20" stroke-width=".035"/><g font-size=".22" fill="#4a5568"><text x="0" y="1.42" text-anchor="middle">0</text><path d="M 0 -.06 V .06" stroke="#718096" stroke-width=".015"/><text x="1.5707963267948966" y="1.42" text-anchor="middle">π/2</text><path d="M 1.5707963267948966 -.06 V .06" stroke="#718096" stroke-width=".015"/><text x="3.141592653589793" y="1.42" text-anchor="middle">π</text><path d="M 3.141592653589793 -.06 V .06" stroke="#718096" stroke-width=".015"/><text x="4.71238898038469" y="1.42" text-anchor="middle">3π/2</text><path d="M 4.71238898038469 -.06 V .06" stroke="#718096" stroke-width=".015"/><text x="6.283185307179586" y="1.42" text-anchor="middle">2π</text><path d="M 6.283185307179586 -.06 V .06" stroke="#718096" stroke-width=".015"/><text x="-.42" y="-.95">1</text><text x="-.48" y="1.05">−1</text><text x="6.6" y="-.12">x</text></g></svg><p><span style="color:#2b6cb0">Blau: sin(x)</span> · <span style="color:#dd6b20">Orange: cos(x)</span></p><p>Periode p = 2π, Wertebereich [−1, 1].</p><p>Sinus: Nullstellen kπ; Kosinus: π/2 + kπ (k ∈ ℤ).</p><p>sin(−x) = −sin(x); cos(−x) = cos(x).</p><p>cos(x) = sin(x − (−π/2)): Verschiebung in x-Richtung um c = −π/2, also nach links.</p></div>
+          <div class="summary-panel"><h3>4 · Allgemeine Sinusfunktion: vier Parameter</h3><div class="summary-formula">f(x) = a · sin(b(x − c)) + d</div><ul><li>a: Amplitude A = |a|; a &lt; 0 → Spiegelung an der Mittellinie.</li><li>b ≠ 0: Periode p = 2π / |b|.</li><li>c: Verschiebung in x-Richtung um den Wert c. Positiv → rechts; negativ → links.</li><li>d: Mittellinie y = d; Wertebereich [d − |a|, d + |a|].</li></ul><p>Beispiel: 3 · sin(2(x − π/4)) + 1</p><p>A = 3 · p = π · c = π/4 · d = 1.</p><p>Ablesen: A = (Maximum − Minimum)/2; d = (Maximum + Minimum)/2; p = Abstand zweier benachbarter Hochpunkte.</p></div>
+          <div class="summary-panel"><h3>5 · Gleichungen: beide Lösungsfamilien</h3><p>Für −1 ≤ q ≤ 1:</p><div class="summary-formula">sin(x) = q: x₁ = arcsin(q), x₂ = π − x₁<br>cos(x) = q: x₁ = arccos(q), x₂ = 2π − x₁</div><p>Alle Lösungen: x = x₁ + k · 2π oder x = x₂ + k · 2π, k ∈ ℤ. Doppelte Lösungen nur einmal zählen.</p><p>Vorgehen: isolieren → ggf. z = b(x − c) setzen → beide Lösungen für z ermitteln → Perioden ergänzen → nach x auflösen → Intervall prüfen.</p><p>Beispiel: cos(x) = 0,5 → x₁ = π/3, x₂ = 5π/3 im Intervall [0, 2π[.</p><p>Taschenrechner bei Bogenmaß auf RAD stellen.</p></div>
+          <div class="summary-panel"><h3>6 · Anwendungen: das Riesenrad</h3><div class="summary-formula">h(t) = −10 · cos((2π / 60) · t) + 12</div><p>Radius 10 m → A = 10 m.<br>Einstieg 2 m → Mittellinie 12 m.<br>Umdrehung in 60 s → p = 60 s.</p><table class="data-table"><tr><th>t (s)</th><td>0</td><td>15</td><td>30</td><td>45</td><td>60</td></tr><tr><th>h (m)</th><td>2</td><td>12</td><td>22</td><td>12</td><td>2</td></tr></table><p>Start unten → negative Kosinusfunktion. Nach einer halben Periode ist die Gondel oben.</p><p>Modellieren: Minimum und Maximum → A und d; Wiederholungsdauer → p und b; Startposition → passende Verschiebung bzw. Sinus-/Kosinusform.</p></div>
+        </div>
+      </div>
+    </section>
+
+</main>
+
+<script>
+/* ==================== GLOBALER STATE & ENGINE ==================== */
+const state = {
+    progress: JSON.parse(localStorage.getItem('trig_progress') || '{}')
+};
+
+function saveProgress() {
+    try {
+        localStorage.setItem('trig_progress', JSON.stringify(state.progress));
+    } catch(e) {}
+}
+
+function showSection(sectionId) {
+    document.querySelectorAll('.section-content').forEach(s => s.style.display = 'none');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    
+    const target = document.getElementById(sectionId + '-section');
+    if(target) target.style.display = 'block';
+    
+    // Nav Button aktivieren
+    const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(sectionId));
+    if(btn) btn.classList.add('active');
+    
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+/* ==================== MATH PARSER ==================== */
+function parseMathInput(input) {
+    if(!input) return NaN;
+    let str = input.toString().trim().toLowerCase().replace(',', '.');
+    
+    // Pi Handling
+    if(str.includes('pi')) {
+        str = str.replace(/pi/g, Math.PI.toString());
+    }
+    
+    // Einfacher Bruch Parser
+    if(str.includes('/')) {
+        const parts = str.split('/');
+        if(parts.length === 2) {
+            const num = parseFloat(parts[0]);
+            const den = parseFloat(parts[1]);
+            if(!isNaN(num) && !isNaN(den) && den !== 0) return num / den;
+        }
+    }
+    
+    return parseFloat(str);
+}
+
+function checkNumericAnswer(userVal, correctVal, tolerance = 0.05) {
+    const parsed = parseMathInput(userVal);
+    if(isNaN(parsed)) return false;
+    return Math.abs(parsed - correctVal) <= tolerance;
+}
+
+/* ==================== WIDGET LOGIK ==================== */
+function updateMod1Widget() {
+    const deg = parseFloat(document.getElementById('m1-slider').value);
+    const rad = deg * (2 * Math.PI / 360);
+    const cosVal = Math.cos(rad);
+    const sinVal = Math.sin(rad);
+
+    document.getElementById('m1-angle-val').textContent = deg;
+    document.getElementById('m1-cos-val').textContent = cosVal.toFixed(2);
+    document.getElementById('m1-sin-val').textContent = sinVal.toFixed(2);
+    document.getElementById('m1-px').textContent = cosVal.toFixed(2);
+    document.getElementById('m1-py').textContent = sinVal.toFixed(2);
+
+    // SVG Elemente anpassen (y ist im SVG nach unten positiv)
+    const px = cosVal;
+    const py = -sinVal;
+
+    document.getElementById('m1-radius').setAttribute('x2', px);
+    document.getElementById('m1-radius').setAttribute('y2', py);
+    document.getElementById('m1-cos').setAttribute('x2', px);
+    document.getElementById('m1-sin').setAttribute('x1', px);
+    document.getElementById('m1-sin').setAttribute('x2', px);
+    document.getElementById('m1-sin').setAttribute('y2', py);
+    document.getElementById('m1-point').setAttribute('cx', px);
+    document.getElementById('m1-point').setAttribute('cy', py);
+}
+
+function convertDegToRad() {
+    const deg = parseFloat(document.getElementById('m2-deg').value) || 0;
+    const rad = deg * (2 * Math.PI / 360);
+    document.getElementById('m2-rad').value = rad.toFixed(3);
+    document.getElementById('m2-calc').textContent = `${deg}° · (2π / 360°) = ${(deg/180).toFixed(2)}π rad ≈ ${rad.toFixed(4)} rad`;
+}
+
+function convertRadToDeg() {
+    const rad = parseFloat(document.getElementById('m2-rad').value) || 0;
+    const deg = rad * (360 / (2 * Math.PI));
+    document.getElementById('m2-deg').value = deg.toFixed(1);
+    document.getElementById('m2-calc').textContent = `${rad} rad · (360° / 2π) ≈ ${deg.toFixed(2)}°`;
+}
+
+function drawMod3() {
+    const showSin = document.getElementById('m3-show-sin').checked;
+    const showCos = document.getElementById('m3-show-cos').checked;
+    
+    let dSin = "", dCos = "";
+    for(let x = 0; x <= 6.28; x += 0.05) {
+        const ySin = -Math.sin(x);
+        const yCos = -Math.cos(x);
+        dSin += (x === 0 ? `M ${x} ${ySin}` : ` L ${x} ${ySin}`);
+        dCos += (x === 0 ? `M ${x} ${yCos}` : ` L ${x} ${yCos}`);
+    }
+    
+    document.getElementById('m3-sin-path').setAttribute('d', showSin ? dSin : '');
+    document.getElementById('m3-cos-path').setAttribute('d', showCos ? dCos : '');
+}
+
+function updateMod4() {
+    const a = parseFloat(document.getElementById('m4-a').value);
+    const b = parseFloat(document.getElementById('m4-b').value);
+    const c = parseFloat(document.getElementById('m4-c').value);
+    const d = parseFloat(document.getElementById('m4-d').value);
+
+    document.getElementById('m4-a-val').textContent = a.toFixed(1);
+    document.getElementById('m4-b-val').textContent = b.toFixed(1);
+    document.getElementById('m4-c-val').textContent = c.toFixed(1);
+    document.getElementById('m4-d-val').textContent = d.toFixed(1);
+
+    document.getElementById('m4-eq-display').textContent = 
+        `${a.toFixed(1)} · sin(${b.toFixed(1)} · (x - ${c.toFixed(1)})) + ${d.toFixed(1)}`;
+
+    document.getElementById('m4-midline').setAttribute('y1', -d);
+    document.getElementById('m4-midline').setAttribute('y2', -d);
+
+    let dPath = "";
+    for(let x = -1; x <= 7; x += 0.05) {
+        const y = -(a * Math.sin(b * (x - c)) + d);
+        dPath += (x === -1 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+    }
+    document.getElementById('m4-graph').setAttribute('d', dPath);
+}
+
+function updateFerris() {
+    const t = parseFloat(document.getElementById('ferris-slider').value);
+    const rad = (2 * Math.PI / 60) * t;
+    // gondel pos (r=10, center=(0,12), start at bottom)
+    const gx = 10 * Math.sin(rad);
+    const gy = 12 - 10 * Math.cos(rad);
+    const h = 12 - 10 * Math.cos(rad);
+
+    document.getElementById('ferris-time-val').textContent = t;
+    document.getElementById('ferris-height-val').textContent = h.toFixed(1);
+
+    document.getElementById('ferris-spoke').setAttribute('x2', gx);
+    document.getElementById('ferris-spoke').setAttribute('y2', gy);
+    document.getElementById('ferris-gondola').setAttribute('cx', gx);
+    document.getElementById('ferris-gondola').setAttribute('cy', gy);
+}
+
+/* ==================== QUIZ DATEN BANK ==================== */
+const quizData = {
+    mod1: [
+        {
+            id: "m1_1", level: "grundlagen", type: "single",
+            question: "Welche Koordinaten besitzt der Punkt P am Einheitskreis für den Winkel α?",
+            options: ["P = (sin(α) | cos(α))", "P = (cos(α) | sin(α))", "P = (tan(α) | sin(α))"],
+            correct: 1,
+            hint: "Der Kosinus ist die x-Koordinate, der Sinus die y-Koordinate.",
+            solution: "Der Punkt P am Einheitskreis ist als P = (cos(α) | sin(α)) definiert."
+        },
+        {
+            id: "m1_2", level: "grundlagen", type: "single",
+            question: "Welche Vorzeichen haben cos(α) und sin(α) im II. Quadranten (90° < α < 180°)?",
+            options: ["cos(α) > 0, sin(α) > 0", "cos(α) < 0, sin(α) > 0", "cos(α) < 0, sin(α) < 0"],
+            correct: 1,
+            hint: "Im II. Quadranten ist x negativ und y positiv.",
+            solution: "Im II. Quadranten gilt cos(α) < 0 (x-Achse negativ) und sin(α) > 0 (y-Achse positiv)."
+        },
+        {
+            id: "m1_3", level: "grundlagen", type: "text",
+            question: "Gib den exakten Wert von sin(30°) als Dezimalzahl an:",
+            correctVal: 0.5,
+            hint: "sin(30°) entspricht genau 1/2.",
+            solution: "sin(30°) = 0,5."
+        },
+        {
+            id: "m1_4", level: "anwenden", type: "single",
+            question: "Welcher Zusammenhang bezüglich der Symmetrie von cos(α) ist korrekt?",
+            options: ["cos(-α) = -cos(α)", "cos(-α) = cos(α)", "cos(180° - α) = cos(α)"],
+            correct: 1,
+            hint: "Die Kosinusfunktion ist achsensymmetrisch zur y-Achse.",
+            solution: "Aufgrund der Achsensymmetrie am Einheitskreis gilt cos(-α) = cos(α)."
+        },
+        {
+            id: "m1_5", level: "anwenden", type: "text",
+            question: "Bestimme cos(120°). Gib den genauen Dezimalwert ein (z. B. -0.5):",
+            correctVal: -0.5,
+            hint: "120° liegt im II. Quadranten. Der Bezugswinkel ist 60°. Beachte das Vorzeichen!",
+            solution: "cos(120°) = -cos(60°) = -0,5."
+        },
+        {
+            id: "m1_6", level: "anwenden", type: "single",
+            question: "Gilt sin²(α) + cos²(α) = 1 für jeden beliebigen Winkel α?",
+            options: ["Ja, das ist der trigonometrische Pythagoras am Einheitskreis.", "Nein, das gilt nur im I. Quadranten."],
+            correct: 0,
+            hint: "Wende den Satz des Pythagoras im rechtwinkligen Dreieck am Einheitskreis an.",
+            solution: "Ja, wegen x² + y² = 1 gilt stets cos²(α) + sin²(α) = 1."
+        },
+        {
+            id: "m1_7", level: "transfer", type: "single",
+            question: "Ein Punkt P am Einheitskreis hat die x-Koordinate -0,6 und liegt im III. Quadranten. Wie lautet seine y-Koordinate sin(α)?",
+            options: ["-0,8", "0,8", "-0,4"],
+            correct: 0,
+            hint: "Verwende sin²(α) + cos²(α) = 1 und beachte das Vorzeichen im III. Quadranten.",
+            solution: "sin²(α) = 1 - (-0,6)² = 1 - 0,36 = 0,64. Im III. Quadranten ist sin(α) negativ, also sin(α) = -0,8."
+        },
+        {
+            id: "m1_8", level: "transfer", type: "text",
+            question: "Berechne den Wert von sin(210°):",
+            correctVal: -0.5,
+            hint: "210° liegt im III. Quadranten (180° + 30°).",
+            solution: "sin(210°) = -sin(30°) = -0,5."
+        },
+        {
+            id: "m1_9", level: "transfer", type: "single",
+            question: "Welcher Winkel im Bereich 0° ≤ α < 360° hat dieselbe y-Koordinate am Einheitskreis wie α = 40°?",
+            options: ["140°", "220°", "320°"],
+            correct: 0,
+            hint: "sin(α) = sin(180° - α).",
+            solution: "Da der Sinus die y-Koordinate darstellt, hat 180° - 40° = 140° denselben y-Wert."
+        }
+    ],
+    mod2: [
+        {
+            id: "m2_1", level: "grundlagen", type: "text",
+            question: "Rechne α = 180° in das Bogenmaß um (in Vielfachen von π, z. B. pi):",
+            correctVal: Math.PI,
+            hint: "180° entspricht genau π rad.",
+            solution: "180° = π rad."
+        },
+        {
+            id: "m2_2", level: "grundlagen", type: "single",
+            question: "Welchem Bogenmaß entspricht der Winkel α = 90°?",
+            options: ["π / 4", "π / 2", "2π"],
+            correct: 1,
+            hint: "90° ist ein Viertel von 360° (2π).",
+            solution: "90° ≙ π/2 rad."
+        },
+        {
+            id: "m2_3", level: "grundlagen", type: "text",
+            question: "Rechne das Bogenmaß x = π/3 in Gradmaß um:",
+            correctVal: 60,
+            hint: "Nutze α = x · (360° / 2π).",
+            solution: "180° / 3 = 60°."
+        },
+        {
+            id: "m2_4", level: "anwenden", type: "text",
+            question: "Ein Kreis hat den Radius r = 4 cm. Wie lang ist der Kreisbogen s bei einem Winkel von x = 0,5 rad?",
+            correctVal: 2,
+            hint: "Nutze die Formel s = r · x.",
+            solution: "s = 4 cm · 0,5 = 2 cm."
+        },
+        {
+            id: "m2_5", level: "anwenden", type: "single",
+            question: "Wie rechnet man ein Bogenmaß x allgemein in den Gradwinkel α um?",
+            options: ["α = x · (360° / 2π)", "α = x · (2π / 360°)", "α = x / 360°"],
+            correct: 0,
+            hint: "Da 2π ≙ 360° entspricht, multipliziert man mit (360° / 2π).",
+            solution: "α = x · (360° / 2π)."
+        },
+        {
+            id: "m2_6", level: "anwenden", type: "text",
+            question: "Rechne α = 270° in Bogenmaß um. Gib das Ergebnis gerundet auf 2 Nachkommastellen an:",
+            correctVal: 4.71,
+            hint: "270° · (2π / 360°) = 1,5 π ≈ 4,71.",
+            solution: "270° ≙ 1,5π ≈ 4,71 rad."
+        },
+        {
+            id: "m2_7", level: "transfer", type: "text",
+            question: "Ein Kreisbogen hat die Länge s = 6π cm bei einem Radius von r = 12 cm. Welchem Gradwinkel α entspricht dieser Bogen?",
+            correctVal: 90,
+            hint: "Zuerst x = s / r im Bogenmaß berechnen, dann in Grad umrechnen.",
+            solution: "x = 6π / 12 = π/2 rad. π/2 rad entsprechen 90°."
+        },
+        {
+            id: "m2_8", level: "transfer", type: "single",
+            question: "Ein Rad dreht sich um den Winkel x = 5π rad. Wie vielen vollen Umdrehungen entspricht das?",
+            options: ["2,5 Umdrehungen", "5 Umdrehungen", "10 Umdrehungen"],
+            correct: 0,
+            hint: "Eine volle Umdrehung entspricht 2π rad.",
+            solution: "5π / 2π = 2,5 Umdrehungen."
+        },
+        {
+            id: "m2_9", level: "transfer", type: "text",
+            question: "Welchem Bogenmaß entspricht α = 135° als Exaktwert (in der Form a*pi/b, als Dezimalzahl ca. 2.356):",
+            correctVal: 2.356,
+            hint: "135° · (2π / 360°) = 3π/4.",
+            solution: "135° = 3/4 π ≈ 2,356 rad."
+        }
+    ],
+    mod3: [
+        {
+            id: "m3_1", level: "grundlagen", type: "single",
+            question: "Welche Periode besitzt die Standard-Sinusfunktion f(x) = sin(x)?",
+            options: ["p = π", "p = 2π", "p = 4π"],
+            correct: 1,
+            hint: "Nach einer vollen Kreisumdrehung (2π) wiederholt sich der Graph.",
+            solution: "Die Periode der Grundfunktion beträgt p = 2π."
+        },
+        {
+            id: "m3_2", level: "grundlagen", type: "single",
+            question: "Wie lautet der Wertebereich W der Funktion f(x) = cos(x)?",
+            options: ["W = ]-∞, ∞[", "W = [-1, 1]", "W = [0, 1]"],
+            correct: 1,
+            hint: "Die y-Werte am Einheitskreis schwanken zwischen -1 und +1.",
+            solution: "Der Wertebereich ist W = [-1, 1]."
+        },
+        {
+            id: "m3_3", level: "grundlagen", type: "text",
+            question: "An welcher Stelle im Intervall [0, 2π] erreicht f(x) = sin(x) ihren Hochpunkt (y = 1)? Gib das Bogenmaß an (z. B. pi/2):",
+            correctVal: Math.PI / 2,
+            hint: "Der Hochpunkt liegt bei 90°.",
+            solution: "Der Hochpunkt liegt bei x = π/2."
+        },
+        {
+            id: "m3_4", level: "anwenden", type: "single",
+            question: "Welche Beziehung beschreibt die Verschiebung in x-Richtung zwischen Sinus und Kosinus korrekt?",
+            options: ["cos(x) = sin(x - π/2)", "cos(x) = sin(x + π/2)", "sin(x) = cos(x + π/2)"],
+            correct: 1,
+            hint: "Der Kosinusgraph eilt dem Sinusgraphen um π/2 voraus (nach links verschoben).",
+            solution: "cos(x) = sin(x + π/2)."
+        },
+        {
+            id: "m3_5", level: "anwenden", type: "single",
+            question: "Welche Symmetrie weist der Graph der Kosinusfunktion g(x) = cos(x) auf?",
+            options: ["Punktsymmetrie zum Ursprung (0|0)", "Achsensymmetrie zur y-Achse"],
+            correct: 1,
+            hint: "Es gilt cos(-x) = cos(x).",
+            solution: "Der Kosinusgraph ist achsensymmetrisch zur y-Achse."
+        },
+        {
+            id: "m3_6", level: "anwenden", type: "text",
+            question: "Gib die kleinste positive Nullstelle von f(x) = sin(x) an:",
+            correctVal: Math.PI,
+            hint: "sin(0) = 0, die nächste Nullstelle liegt bei 180°.",
+            solution: "Die Nullstellen des Sinus liegen bei k·π. Die kleinste positive ist x = π."
+        },
+        {
+            id: "m3_7", level: "transfer", type: "single",
+            question: "An wie vielen Stellen im Intervall [0, 2π] schneiden sich die Graphen von sin(x) und cos(x)?",
+            options: ["An 1 Stelle", "An 2 Stellen", "An 4 Stellen"],
+            correct: 1,
+            hint: "sin(x) = cos(x) gilt bei x = π/4 (45°) und x = 5π/4 (225°).",
+            solution: "Sie schneiden sich an 2 Stellen: x = π/4 und x = 5π/4."
+        },
+        {
+            id: "m3_8", level: "transfer", type: "text",
+            question: "Berechne den Wert von f(x) = sin(x) + cos(x) für x = π/4 (gerundet auf 2 Dezimalstellen):",
+            correctVal: 1.41,
+            hint: "sin(π/4) = √2/2, cos(π/4) = √2/2.",
+            solution: "√2/2 + √2/2 = √2 ≈ 1,41."
+        },
+        {
+            id: "m3_9", level: "transfer", type: "single",
+            question: "Wie entsteht der Graph von h(x) = -sin(x) aus f(x) = sin(x)?",
+            options: ["Durch Spiegelung an der x-Achse", "Durch Spiegelung an der y-Achse", "Durch Verschiebung um π nach oben"],
+            correct: 0,
+            hint: "Alle y-Werte ändern ihr Vorzeichen.",
+            solution: "Ein negatives Vorzeichen spiegelt den Graphen an der x-Achse."
+        }
+    ],
+    mod4: [
+        {
+            id: "m4_1", level: "grundlagen", type: "text",
+            question: "Bestimme die Amplitude A der Funktion f(x) = -3 · sin(2 · (x - 1)) + 4:",
+            correctVal: 3,
+            hint: "Die Amplitude A ist stets positiv: A = |a|.",
+            solution: "A = |-3| = 3."
+        },
+        {
+            id: "m4_2", level: "grundlagen", type: "text",
+            question: "Berechne die Periode p der Funktion f(x) = sin(2x):",
+            correctVal: Math.PI,
+            hint: "p = 2π / |b|.",
+            solution: "p = 2π / 2 = π."
+        },
+        {
+            id: "m4_3", level: "grundlagen", type: "single",
+            question: "Welche Bedeutung hat der Parameter d in f(x) = a · sin(b(x - c)) + d?",
+            options: ["Verschiebung der Mittellinie in y-Richtung", "Verschiebung in x-Richtung nach rechts", "Veränderung der Periode"],
+            correct: 0,
+            hint: "d gibt die vertikale Verschiebung an.",
+            solution: "d bestimmt die vertikale Lage der Mittellinie y = d."
+        },
+        {
+            id: "m4_4", level: "anwenden", type: "text",
+            question: "Bestimme den maximalen Funktionswert (Hochpunkt-y-Wert) von f(x) = 2 · sin(x) + 3:",
+            correctVal: 5,
+            hint: "y_max = d + |a|.",
+            solution: "y_max = 3 + 2 = 5."
+        },
+        {
+            id: "m4_5", level: "anwenden", type: "text",
+            question: "Gegeben ist f(x) = sin(4x). Wie groß ist die Periode p? (als Dezimalzahl oder mit pi, z. B. pi/2):",
+            correctVal: Math.PI / 2,
+            hint: "p = 2π / 4.",
+            solution: "p = 2π / 4 = π/2 ≈ 1,57."
+        },
+        {
+            id: "m4_6", level: "anwenden", type: "single",
+            question: "Wie lautet die Verschiebung in x-Richtung c für die Funktion f(x) = 2 · sin(3 · (x - π/2))?",
+            options: ["c = π/2 nach rechts", "c = π/2 nach links", "c = 3π/2"],
+            correct: 0,
+            hint: "Achte auf das Minuszeichen in (x - c).",
+            solution: "Da in der Klammer (x - π/2) steht, ist c = +π/2 (Verschiebung nach rechts)."
+        },
+        {
+            id: "m4_7", level: "transfer", type: "single",
+            question: "Ein Graph schwankt zwischen den y-Werten 1 und 7. Welchen Wert besitzen Amplitude a und Mittellinie d?",
+            options: ["a = 3, d = 4", "a = 6, d = 1", "a = 4, d = 3"],
+            correct: 0,
+            hint: "Mittellinie d = (y_max + y_min)/2, Amplitude a = (y_max - y_min)/2.",
+            solution: "d = (7 + 1)/2 = 4; Amplitude a = (7 - 1)/2 = 3."
+        },
+        {
+            id: "m4_8", level: "transfer", type: "text",
+            question: "Gegeben ist g(x) = sin(2x + π). Bringe die Funktion in die Standardform sin(b(x - c)) und gib den Wert der Verschiebung in x-Richtung c an (als Dezimalzahl mit pi, z. B. -pi/2):",
+            correctVal: -Math.PI / 2,
+            hint: "Klammere b = 2 aus: 2x + π = 2·(x + π/2) = 2·(x - (-π/2)).",
+            solution: "sin(2·(x - (-π/2))), also c = -π/2."
+        },
+        {
+            id: "m4_9", level: "transfer", type: "single",
+            question: "Welchen Einfluss hat a = -2 im Vergleich zu a = 2 auf den Graphen von f(x) = a · sin(x)?",
+            options: ["Der Graph wird zusätzlich an der x-Achse gespiegelt.", "Die Periode halbiert sich.", "Der Graph verschiebt sich nach unten."],
+            correct: 0,
+            hint: "Ein negatives Vorzeichen kehrt alle y-Werte um.",
+            solution: "Das negative Vorzeichen bewirkt eine Spiegelung an der x-Achse (bzw. der Mittellinie)."
+        }
+    ],
+    mod5: [
+        {
+            id: "m5_1", level: "grundlagen", type: "text",
+            question: "Bestimme die erste Grundlösung x₁ im Intervall [0, 2π] der Gleichung sin(x) = 0,5 (im Bogenmaß, z. B. pi/6):",
+            correctVal: Math.PI / 6,
+            hint: "arcsin(0.5) entspricht 30° = π/6.",
+            solution: "x₁ = π/6 rad (≙ 30°)."
+        },
+        {
+            id: "m5_2", level: "grundlagen", type: "text",
+            question: "Bestimme die zweite Lösung x₂ im Intervall [0, 2π] der Gleichung sin(x) = 0,5 (z. B. 5*pi/6):",
+            correctVal: 5 * Math.PI / 6,
+            hint: "x₂ = π - x₁.",
+            solution: "x₂ = π - π/6 = 5π/6 rad (≙ 150°)."
+        },
+        {
+            id: "m5_3", level: "grundlagen", type: "single",
+            question: "Wie viele Lösungen besitzt die Gleichung sin(x) = 1,5?",
+            options: ["Keine Lösung", "Eine Lösung", "Unendlich viele Lösungen"],
+            correct: 0,
+            hint: "Beachte den Wertebereich W = [-1, 1] der Sinusfunktion.",
+            solution: "Da der Wertebereich des Sinus [-1, 1] ist, gibt es keine Lösung für 1,5."
+        },
+        {
+            id: "m5_4", level: "anwenden", type: "text",
+            question: "Löse die Gleichung cos(x) = 0 im Intervall [0, 2π]. Gib die kleinere der beiden Lösungen an (z. B. pi/2):",
+            correctVal: Math.PI / 2,
+            hint: "Der Kosinus ist bei 90° und 270° Null.",
+            solution: "x₁ = π/2 (90°), x₂ = 3π/2 (270°). Die kleinere ist π/2."
+        },
+        {
+            id: "m5_5", level: "anwenden", type: "single",
+            question: "Wie lautet die zweite Lösung x₂ der Kosinusgleichung cos(x) = k, wenn x₁ bekannt ist?",
+            options: ["x₂ = 2π - x₁", "x₂ = π - x₁", "x₂ = x₁ + π"],
+            correct: 0,
+            hint: "Wegen der Achsensymmetrie gilt cos(x) = cos(2π - x).",
+            solution: "x₂ = 2π - x₁."
+        },
+        {
+            id: "m5_6", level: "anwenden", type: "text",
+            question: "Löse 2 · sin(x) - 1 = 0 nach sin(x) auf. Welcher Wert ergibt sich für sin(x)?",
+            correctVal: 0.5,
+            hint: "Addiere 1 und dividiere durch 2.",
+            solution: "2·sin(x) = 1  ⇒  sin(x) = 0,5."
+        },
+        {
+            id: "m5_7", level: "transfer", type: "text",
+            question: "Löse sin(2x) = 1 im Intervall [0, π]. Gib die Lösung für x an (z. B. pi/4):",
+            correctVal: Math.PI / 4,
+            hint: "Setze z = 2x. sin(z) = 1 ⇒ z = π/2. Dann x = z / 2.",
+            solution: "2x = π/2 ⇒ x = π/4."
+        },
+        {
+            id: "m5_8", level: "transfer", type: "single",
+            question: "Wie viele Lösungen besitzt die Gleichung sin(3x) = 0,5 im Intervall [0, 2π[?",
+            options: ["2 Lösungen", "3 Lösungen", "6 Lösungen"],
+            correct: 2,
+            hint: "Durch den Faktor b = 3 verdreifacht sich die Anzahl der Perioden im Intervall.",
+            solution: "In einer Periode gibt es 2 Lösungen. Bei 3 Perioden ergeben sich 3 · 2 = 6 Lösungen."
+        },
+        {
+            id: "m5_9", level: "transfer", type: "text",
+            question: "Löse cos(x) = -1 im Intervall [0, 2π]:",
+            correctVal: Math.PI,
+            hint: "Der Kosinus erreicht seinen Tiefpunkt (-1) bei 180°.",
+            solution: "x = π (180°)."
+        }
+    ],
+    mod6: [
+        {
+            id: "m6_1", level: "grundlagen", type: "text",
+            question: "Ein Riesenrad hat einen Radius von 15 m. Wie groß ist die Amplitude A der zugehörigen Höhenfunktion h(t)?",
+            correctVal: 15,
+            hint: "Die Amplitude entspricht genau dem Radius des Riesenrads.",
+            solution: "A = R = 15 m."
+        },
+        {
+            id: "m6_2", level: "grundlagen", type: "text",
+            question: "Die Achse eines Riesenrads liegt in 18 m Höhe. Wie lautet der Parameter d der Mittellinie?",
+            correctVal: 18,
+            hint: "Die Mittellinie entspricht der Höhe der Drehachse.",
+            solution: "d = 18 m."
+        },
+        {
+            id: "m6_3", level: "grundlagen", type: "text",
+            question: "Ein Vorgang wiederholt sich alle 12 Stunden. Berechne den Periodenfaktor b = 2π / p (gerundet auf 3 Nachkommastellen):",
+            correctVal: 0.524,
+            hint: "b = 2π / 12 = π / 6 ≈ 0,5236.",
+            solution: "b = 2π / 12 ≈ 0,524."
+        },
+        {
+            id: "m6_4", level: "anwenden", type: "text",
+            question: "Ein Temperaturverlauf wird modelliert durch p(t) = -5 · cos((2π/24)·t) + 15. Welche Höchsttemperatur wird erreicht?",
+            correctVal: 20,
+            hint: "T_max = d + |a|.",
+            solution: "T_max = 15 + 5 = 20 °C."
+        },
+        {
+            id: "m6_5", level: "anwenden", type: "text",
+            question: "Welche Tiefsttemperatur ergibt sich für das Modell p(t) = -5 · cos((2π/24)·t) + 15?",
+            correctVal: 10,
+            hint: "T_min = d - |a|.",
+            solution: "T_min = 15 - 5 = 10 °C."
+        },
+        {
+            id: "m6_6", level: "anwenden", type: "single",
+            question: "Warum eignet sich die Funktion f(t) = -a · cos(b·t) + d besonders gut für ein Riesenrad, in das man unten (am Tiefpunkt t = 0) einsteigt?",
+            options: ["Weil -cos(0) = -1 gilt und die Funktion somit bei t = 0 ihren Tiefpunkt hat.", "Weil der Kosinus immer bei 0 startet.", "Weil die Amplitude dadurch negativ wird."],
+            correct: 0,
+            hint: "cos(0) = 1, daher ist -a · cos(0) + d = d - a (Tiefpunkt).",
+            solution: "Bei t = 0 ist -a · cos(0) + d = d - a, was exakt dem tiefsten Punkt entspricht."
+        },
+        {
+            id: "m6_7", level: "transfer", type: "text",
+            question: "Die Wasserhöhe am Hafen wird durch h(t) = 2 · sin((π/6)·t) + 5 modelliert (t in Stunden). Nach wie vielen Stunden wird erstmals die maximale Höhe (7 m) erreicht?",
+            correctVal: 3,
+            hint: "Der Sinus erreicht sein Maximum bei π/2. Setze (π/6)·t = π/2.",
+            solution: "(π/6)·t = π/2  ⇒  t = 3 Stunden."
+        },
+        {
+            id: "m6_8", level: "transfer", type: "single",
+            question: "Welche Einschränkung besitzen mathematische Modellierungen periodischer Vorgänge in der Realität?",
+            options: ["Reale Vorgänge wie Wetter oder Gezeiten sind nie perfekt exakt periodisch.", "Trigonometrische Funktionen gelten nur für Winkel unter 90°.", "Die Amplitude ändert sich im Modell sekündlich."],
+            correct: 0,
+            hint: "Mathematische Modelle sind idealisierte Vereinfachungen.",
+            solution: "In der Realität schwanken Vorgänge durch äußere Einflüsse, weshalb das Modell eine Idealisierung ist."
+        },
+        {
+            id: "m6_9", level: "transfer", type: "text",
+            question: "Ein Pendel schwingt mit einer Periode von p = 2 Sekunden. Berechne den exakten Wert des Parameters b (in Vielfachen von π, z. B. pi):",
+            correctVal: Math.PI,
+            hint: "b = 2π / p.",
+            solution: "b = 2π / 2 = π."
+        }
+    ]
+};
+
+/* ==================== QUIZ RENDER ENGINE ==================== */
+function renderQuiz(moduleId) {
+    const container = document.getElementById(`quiz-${moduleId}`);
+    if(!container) return;
+
+    const questions = quizData[moduleId] || [];
+    let html = "";
+
+    questions.forEach((q, idx) => {
+        const qState = state.progress[q.id] || { attempts: 0, solved: false, hintShown: false, solShown: false };
+        
+        html += `
+            <div class="task-card" id="card-${q.id}">
+                <div class="task-header">
+                    <strong>Aufgabe ${idx + 1}</strong>
+                    <span class="badge badge-${q.level}">${q.level}</span>
+                </div>
+                <p>${q.question}</p>
+        `;
+
+        if(q.type === 'single') {
+            q.options.forEach((opt, oIdx) => {
+                html += `
+                    <label class="option-label">
+                        <input type="radio" name="opt-${q.id}" value="${oIdx}" ${qState.solved ? 'disabled' : ''}>
+                        <span>${opt}</span>
+                    </label>
+                `;
+            });
+        } else if(q.type === 'text') {
+            html += `
+                <div style="margin-bottom:12px;">
+                    <input type="text" id="input-${q.id}" class="input-text" placeholder="Deine Antwort..." ${qState.solved ? 'disabled' : ''}>
+                </div>
+            `;
+        }
+
+        html += `
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <button class="btn" onclick="checkAnswer('${moduleId}', '${q.id}')" ${qState.solved ? 'disabled' : ''}>Antwort prüfen</button>
+                <button class="btn btn-secondary" onclick="toggleHint('${q.id}')">Hinweis</button>
+                <button class="btn btn-secondary" onclick="toggleSolution('${q.id}')">Musterlösung</button>
+            </div>
+
+            <div id="feedback-${q.id}" class="feedback-box"></div>
+            <div id="hint-${q.id}" class="hint-box">💡 <strong>Hinweis:</strong> ${q.hint}</div>
+            <div id="solution-${q.id}" class="solution-box">📘 <strong>Musterlösung:</strong> ${q.solution}</div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+function checkAnswer(moduleId, qId) {
+    const list = quizData[moduleId] || [];
+    const q = list.find(item => item.id === qId);
+    if(!q) return;
+
+    if(!state.progress[qId]) {
+        state.progress[qId] = { attempts: 0, solved: false, hintShown: false, solShown: false, firstTrySuccess: false };
+    }
+    const qState = state.progress[qId];
+    qState.attempts++;
+
+    let isCorrect = false;
+
+    if(q.type === 'single') {
+        const selected = document.querySelector(`input[name="opt-${qId}"]:checked`);
+        if(!selected) {
+            alert("Bitte wähle eine Antwortmöglichkeit aus!");
+            return;
+        }
+        isCorrect = parseInt(selected.value) === q.correct;
+    } else if(q.type === 'text') {
+        const val = document.getElementById(`input-${qId}`).value;
+        isCorrect = checkNumericAnswer(val, q.correctVal);
+    }
+
+    const fb = document.getElementById(`feedback-${qId}`);
+    fb.style.display = 'block';
+
+    if(isCorrect) {
+        fb.className = "feedback-box feedback-correct";
+        fb.innerHTML = "✓ <strong>Richtig!</strong> Hervorragend gemacht.";
+        qState.solved = true;
+        if(qState.attempts === 1 && !qState.hintShown && !qState.solShown) {
+            qState.firstTrySuccess = true;
+        }
+    } else {
+        fb.className = "feedback-box feedback-incorrect";
+        fb.innerHTML = "✗ <strong>Noch nicht ganz richtig.</strong> Überprüfe deine Eingabe oder nutze den Hinweis.";
+    }
+
+    saveProgress();
+    updateDashboard();
+}
+
+function toggleHint(qId) {
+    const box = document.getElementById(`hint-${qId}`);
+    if(!box) return;
+    const isVisible = box.style.display === 'block';
+    box.style.display = isVisible ? 'none' : 'block';
+    
+    if(!state.progress[qId]) state.progress[qId] = { attempts:0, solved:false, hintShown:true };
+    else state.progress[qId].hintShown = true;
+    saveProgress();
+}
+
+function toggleSolution(qId) {
+    const box = document.getElementById(`solution-${qId}`);
+    if(!box) return;
+    const isVisible = box.style.display === 'block';
+    box.style.display = isVisible ? 'none' : 'block';
+    
+    if(!state.progress[qId]) state.progress[qId] = { attempts:0, solved:false, solShown:true };
+    else state.progress[qId].solShown = true;
+    saveProgress();
+}
+
+/* ==================== DASHBOARD & PROGRESS ==================== */
+const moduleTitles = {
+    mod1: "1. Einheitskreis",
+    mod2: "2. Bogenmaß",
+    mod3: "3. Grundfunktionen",
+    mod4: "4. Allgemeine Sinusfkt.",
+    mod5: "5. Gleichungen",
+    mod6: "6. Anwendungen"
+};
+
+function updateDashboard() {
+    const grid = document.getElementById('dashboard-modules');
+    if(!grid) return;
+
+    let html = "";
+    Object.keys(quizData).forEach(mId => {
+        const tasks = quizData[mId];
+        let solvedCount = 0;
+        let firstTryCount = 0;
+
+        tasks.forEach(t => {
+            const p = state.progress[t.id];
+            if(p && p.solved) solvedCount++;
+            if(p && p.firstTrySuccess) firstTryCount++;
+        });
+
+        const percent = Math.round((solvedCount / tasks.length) * 100);
+
+        html += `
+            <div class="module-card" onclick="showSection('${mId}')">
+                <h3>${moduleTitles[mId]}</h3>
+                <p style="font-size:0.9rem; color:var(--text-muted);">${solvedCount} von ${tasks.length} Aufgaben gelöst</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:${percent}%;"></div>
+                </div>
+                <small style="color:var(--primary); font-weight:bold;">${firstTryCount} im 1. Versuch gelöst</small>
+            </div>
+        `;
+    });
+
+    grid.innerHTML = html;
+}
+
+function resetAllProgress() {
+    if(confirm("Möchtest du deinen gesamten Lernfortschritt wirklich zurücksetzen?")) {
+        state.progress = {};
+        saveProgress();
+        updateDashboard();
+        Object.keys(quizData).forEach(renderQuiz);
+        alert("Lernfortschritt erfolgreich zurückgesetzt.");
+    }
+}
+
+/* ==================== ABSCHLUSSCHECK ==================== */
+function renderExam() {
+    const container = document.getElementById('quiz-exam');
+    if(!container) return;
+
+    // Erstelle 12 gemischte Fragen aus den Modulen
+    const examQuestions = [
+        quizData.mod1[0], quizData.mod1[4],
+        quizData.mod2[1], quizData.mod2[3],
+        quizData.mod3[0], quizData.mod3[3],
+        quizData.mod4[0], quizData.mod4[1],
+        quizData.mod5[0], quizData.mod5[6],
+        quizData.mod6[0], quizData.mod6[3]
+    ];
+
+    let html = "";
+    examQuestions.forEach((q, idx) => {
+        html += `
+            <div class="task-card" id="card-exam-${q.id}">
+                <div class="task-header">
+                    <strong>Frage ${idx + 1}</strong>
+                </div>
+                <p>${q.question}</p>
+        `;
+
+        if(q.type === 'single') {
+            q.options.forEach((opt, oIdx) => {
+                html += `
+                    <label class="option-label">
+                        <input type="radio" name="opt-exam-${q.id}" value="${oIdx}">
+                        <span>${opt}</span>
+                    </label>
+                `;
+            });
+        } else if(q.type === 'text') {
+            html += `
+                <div style="margin-bottom:12px;">
+                    <input type="text" id="input-exam-${q.id}" class="input-text" placeholder="Deine Antwort...">
+                </div>
+            `;
+        }
+
+        html += `</div>`;
+    });
+
+    container.innerHTML = html;
+}
+
+function evaluateExam() {
+    const examQuestions = [
+        quizData.mod1[0], quizData.mod1[4],
+        quizData.mod2[1], quizData.mod2[3],
+        quizData.mod3[0], quizData.mod3[3],
+        quizData.mod4[0], quizData.mod4[1],
+        quizData.mod5[0], quizData.mod5[6],
+        quizData.mod6[0], quizData.mod6[3]
+    ];
+
+    let score = 0;
+
+    examQuestions.forEach(q => {
+        let correct = false;
+        if(q.type === 'single') {
+            const sel = document.querySelector(`input[name="opt-exam-${q.id}"]:checked`);
+            if(sel && parseInt(sel.value) === q.correct) correct = true;
+        } else if(q.type === 'text') {
+            const val = document.getElementById(`input-exam-${q.id}`).value;
+            if(checkNumericAnswer(val, q.correctVal)) correct = true;
+        }
+        if(correct) score++;
+    });
+
+    const box = document.getElementById('exam-result-box');
+    const txt = document.getElementById('exam-score-text');
+    box.style.display = 'block';
+    
+    txt.innerHTML = `Du hast <strong>${score} von ${examQuestions.length} Aufgaben</strong> richtig gelöst (${Math.round((score/examQuestions.length)*100)}%).<br>` +
+        (score >= 10 ? "Hervorragende Leistung! Du beherrschst die Grundlagen und Anwendungen der Trigonometrie sicher." :
+         score >= 7 ? "Gute Leistung! Wiederhole noch gezielt die Themenbereiche, bei denen du unsicher warst." :
+         "Empfehlung: Gehe die einzelnen Lernmodule noch einmal in Ruhe durch.");
+}
+
+
+/* Beschriftete Skalen: SVG-y entspricht dem negativen mathematischen y. */
+function addScales(id, xs, ys, fontSize, xName='x', yName='y') {
+    const svg = document.getElementById(id), ns='http://www.w3.org/2000/svg';
+    const g=document.createElementNS(ns,'g');
+    g.setAttribute('fill','#4a5568'); g.setAttribute('font-family','Arial, sans-serif');
+    g.setAttribute('font-size',fontSize);
+    function line(x1,y1,x2,y2) {
+        const el=document.createElementNS(ns,'line');
+        Object.entries({x1,y1,x2,y2,stroke:'#a0aec0','stroke-width':fontSize/12}).forEach(([k,v])=>el.setAttribute(k,v)); g.appendChild(el);
+    }
+    function text(x,y,value,anchor='middle') {
+        const el=document.createElementNS(ns,'text'); el.setAttribute('x',x);el.setAttribute('y',y);el.setAttribute('text-anchor',anchor);el.textContent=value;g.appendChild(el);
+    }
+    xs.forEach(([v,label])=>{line(v,-fontSize/3,v,fontSize/3);text(v,fontSize*1.6,label);});
+    ys.forEach(([v,label])=>{line(-fontSize/3,-v,fontSize/3,-v);if(v!==0)text(-fontSize*.6,-v+fontSize*.3,label,'end');});
+    const box=svg.viewBox.baseVal;
+    text(box.x+box.width-fontSize*.6,-fontSize*.5,xName);
+    text(fontSize*.6,box.y+fontSize*1.2,yName,'start');
+    svg.appendChild(g);
+}
+function initializeScales() {
+    addScales('svg-mod1',[[-1,'−1'],[-.5,'−0,5'],[0,'0'],[.5,'0,5'],[1,'1']],[[-1,'−1'],[-.5,'−0,5'],[.5,'0,5'],[1,'1']],.10);
+    const piTicks=[[0,'0'],[Math.PI/2,'π/2'],[Math.PI,'π'],[3*Math.PI/2,'3π/2'],[2*Math.PI,'2π']];
+    addScales('svg-mod3',piTicks,[[-1,'−1'],[1,'1']],.17);
+    addScales('svg-mod4',piTicks,[[-6,'−6'],[-4,'−4'],[-2,'−2'],[2,'2'],[4,'4'],[6,'6']],.28);
+    addScales('svg-ferris',[[-10,'−10'],[0,'0'],[10,'10']],[[2,'2'],[12,'12'],[22,'22']],1.1,'x (m)','h (m)');
+    const svg=document.getElementById('svg-ferris');
+    const axis=document.createElementNS('http://www.w3.org/2000/svg','line');
+    Object.entries({x1:0,y1:0,x2:0,y2:-24,stroke:'#a0aec0','stroke-width':.12}).forEach(([k,v])=>axis.setAttribute(k,v));
+    svg.insertBefore(axis,svg.firstChild);
+}
+
+/* ==================== INIT ==================== */
+window.onload = function() {
+    initializeScales();
+    // Widgets initialisieren
+    updateMod1Widget();
+    convertDegToRad();
+    drawMod3();
+    updateMod4();
+    updateFerris();
+
+    // Quizzes rendern
+    Object.keys(quizData).forEach(renderQuiz);
+    renderExam();
+    updateDashboard();
+};
+</script>
+</body>
+</html>
